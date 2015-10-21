@@ -8,7 +8,6 @@ VOLUME ["/opt/minecraft"]
 ENV MINECRAFT_VERSION 1.7.10
 ENV MINECRAFT_OPTS -server -Xms1048m -Xmx6072m -XX:MaxPermSize=256m -XX:+UseParNewGC -XX:+UseConcMarkSweepGC
 ENV MINECRAFT_STARTUP_JAR minecraft_server.1.7.10.jar
-ENV WORLD_DIR /opt/minecraft
 
 RUN \
     mkdir -p $MINECRAFT_HOME/backups && \
