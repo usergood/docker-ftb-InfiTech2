@@ -1,4 +1,4 @@
-FROM dlord/minecraft
+FROM dlord/minecraft:latest
 MAINTAINER kurri@glappet.com
 
 #ENV FTB_RESURRECTION_URL http://new.creeperrepo.net/FTB2/modpacks/FTBResurrection/1_0_1/FTBResurrectionServer.zip
