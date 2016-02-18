@@ -1,15 +1,41 @@
-FROM dlord/minecraft:latest
-MAINTAINER kurri@glappet.com
+FROM itzg/ubuntu-openjdk-7
 
-#ENV FTB_RESURRECTION_URL http://new.creeperrepo.net/FTB2/modpacks/FTBResurrection/1_0_1/FTBResurrectionServer.zip
-ENV LAUNCHWRAPPER net/minecraft/launchwrapper/1.11/launchwrapper-1.11.jar
-VOLUME ["/opt/minecraft","/var/lib/minecraft"]
+MAINTAINER usergood <kurri@glappet.com>
 
-ENV MINECRAFT_VERSION 1.7.10
-ENV MINECRAFT_OPTS -server -Xms1048m -Xmx6072m -XX:MaxPermSize=256m -XX:+UseParNewGC -XX:+UseConcMarkSweepGC
-ENV MINECRAFT_STARTUP_JAR minecraft_server.1.7.10.jar
+ENV APT_GET_UPDATE 2016-02-18
+RUN apt-get update
 
-RUN \
-    mkdir -p $MINECRAFT_HOME/backups && \
-    find $MINECRAFT_HOME -name "*.log" -exec rm -f {} \; && \
-    rm -rf $MINECRAFT_HOME/ops.* $MINECRAFT_HOME/whitelist.* $MINECRAFT_HOME/logs/* /tmp/*
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libmozjs-24-bin imagemagick lsof && apt-get clean
+RUN update-alternatives --install /usr/bin/js js /usr/bin/js24 100
+
+RUN wget -O /usr/bin/jsawk https://github.com/micha/jsawk/raw/master/jsawk
+RUN chmod +x /usr/bin/jsawk
+RUN useradd -M -s /bin/false --uid 1000 minecraft \
+  && mkdir /data \
+  && mkdir /config \
+  && mkdir /mods \
+  && mkdir /plugins \
+  && chown minecraft:minecraft /data /config /mods /plugins
+
+EXPOSE 25565
+
+COPY start.sh /start
+COPY start-minecraft.sh /start-minecraft
+
+VOLUME ["/data"]
+VOLUME ["/mods"]
+VOLUME ["/config"]
+VOLUME ["/plugins"]
+COPY server.properties /tmp/server.properties
+WORKDIR /data
+
+CMD [ "/start" ]
+
+# Special marker ENV used by MCCY management tool
+ENV MC_IMAGE=YES
+
+ENV UID=1000 GID=1000
+ENV MOTD A Minecraft Server Powered by Docker
+ENV JVM_OPTS -Xmx1024M -Xms1024M
+ENV TYPE=VANILLA VERSION=LATEST FORGEVERSION=RECOMMENDED LEVEL=world PVP=true DIFFICULTY=easy \
+  LEVEL_TYPE=DEFAULT GENERATOR_SETTINGS= WORLD= MODPACK= FTBPACK=
