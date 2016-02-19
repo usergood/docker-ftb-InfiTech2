@@ -326,7 +326,8 @@ case "X$FTBPACK" in
     wget -q -O /tmp/ftbpack.zip "$FTBPACK"
 	mkdir -p /tmp/ftbpack
 	unzip -d /tmp/ftbpack /tmp/ftbpack.zip
-
+	rm -rf /data/config
+	rm -rf /data/mods
 	mv "/tmp/ftbpack/minecraft_server.$VANILLA_VERSION.jar" /data
 	mv /tmp/ftbpack/server-forge.jar /data
 	mv /tmp/ftbpack/config /data
