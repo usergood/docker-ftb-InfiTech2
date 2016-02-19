@@ -20,7 +20,9 @@ RUN useradd -M -s /bin/false --uid 1000 minecraft \
 EXPOSE 25565
 
 COPY start.sh /start
+RUN chmod +x /start; sync
 COPY start-minecraft.sh /start-minecraft
+RUN chmod +x /start-minecraft; sync
 
 VOLUME ["/data"]
 VOLUME ["/mods"]
